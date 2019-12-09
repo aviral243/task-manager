@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 mongoose.connect("mongodb://127.0.0.1:27017/task-manager-api", {
   useNewUrlParser: true,
@@ -33,7 +34,12 @@ const Tasks = mongoose.model("Tasks", {
     type: String
   },
   completed: {
-    type: Boolean
+    type: Boolean,
+    validate(value) {
+      if (value < 0) {
+        throw new Error("Age must be a positive number.");
+      }
+    }
   }
 });
 
