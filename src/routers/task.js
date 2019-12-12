@@ -4,19 +4,26 @@ const auth = require("../middleware/auth");
 const router = new express.Router();
 
 // GET /tasks?completed=true
-
+// GET /tasks?limit=true&skip=0
 router.get("/tasks", auth, async (req, res) => {
   if (req.query.completed) {
     var match = req.query.completed === "true";
     try {
-      const tasks = await Task.find({ owner: req.user._id, completed: match });
+      const tasks = await Task.find({
+        owner: req.user._id,
+        completed: match
+      })
+        .limit(parseInt(req.query.limit))
+        .skip(parseInt(req.query.skip));
       res.send(tasks);
     } catch (e) {
       res.status(500).send();
     }
   } else {
     try {
-      const tasks = await Task.find({ owner: req.user._id });
+      const tasks = await Task.find({ owner: req.user._id })
+        .limit(parseInt(req.query.limit))
+        .skip(parseInt(req.query.skip));
       res.send(tasks);
     } catch (e) {
       res.status(500).send();
