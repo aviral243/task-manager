@@ -3,12 +3,24 @@ const Task = require("../models/task");
 const auth = require("../middleware/auth");
 const router = new express.Router();
 
+// GET /tasks?completed=true
+
 router.get("/tasks", auth, async (req, res) => {
-  try {
-    const tasks = await Task.find({ owner: req.user._id });
-    res.send(tasks);
-  } catch (e) {
-    res.status(500).send();
+  if (req.query.completed) {
+    var match = req.query.completed === "true";
+    try {
+      const tasks = await Task.find({ owner: req.user._id, completed: match });
+      res.send(tasks);
+    } catch (e) {
+      res.status(500).send();
+    }
+  } else {
+    try {
+      const tasks = await Task.find({ owner: req.user._id });
+      res.send(tasks);
+    } catch (e) {
+      res.status(500).send();
+    }
   }
 });
 
