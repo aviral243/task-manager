@@ -14,6 +14,16 @@ const sendWelcomeEmail = (email, name) => {
   });
 };
 
+const sendCancellationEmail = (email, name) => {
+  sgMail.send({
+    to: email,
+    from: "aviralgangwar24@gmail.com",
+    subject: "Account deleted",
+    text: `Hi ${name}. We're sad to see you go. Let us know how we can serve you better.`
+  });
+};
+
 module.exports = {
-  sendWelcomeEmail
+  sendWelcomeEmail,
+  sendCancellationEmail
 };
